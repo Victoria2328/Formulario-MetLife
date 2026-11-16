@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORMULARIO</title>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --metlife-blue: #004266;
+            --metlife-dark-blue: #042d52;
+            --metlife-green: #bbeb5d;
+            --metlife-green-hover: #c5f860;
+            --metlife-bg: #F4F6F9;
+        }
+
+        body {
+            background-color: var(--metlife-bg);
+            font-family: 'Inter', sans-serif;
+            color: #212529;
+        }
+
+        .metlife-card {
+            border-top: 6px solid var(--metlife-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metlife-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 35%;
+            height: 6px;
+            background-color: var(--metlife-green);
+        }
+
+        .metlife-title {
+            color: var(--metlife-dark-blue);
+            letter-spacing: -0.5px;
+        }
+
+        /* Organiza los campos en 2 columnas bien alineadas */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 19px 24px;
+        }
+
+        @media (max-width: 576px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Contenedor de cada campo individual */
+        .field-box {
+            margin-bottom: 0;
+        }
+
+        .field-box label {
+            font-weight: 600;
+            color: var(--metlife-dark-blue);
+            font-size: 1rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .field-box input, 
+        .field-box select, 
+        .field-box textarea {
+            display: block;
+            width: 100%;
+            padding: 0.55rem 0.9rem;
+            font-size: 1rem;
+            color: #1a1a1a;
+            background-color: #ffffff;
+            border: 1.5px solid #cfd8e3;
+            border-radius: 6px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field-box input:focus, 
+        .field-box select:focus, 
+        .field-box textarea:focus {
+            border-color: var(--metlife-blue);
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 122, 188, 0.18);
+        }
+
+        /* Mensaje de error en rojo debajo de cada campo */
+        .error-rojo {
+            color: #d93025;
+            background-color: #fdecea;
+            border-left: 4px solid #d93025;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* Botón principal Azul MetLife */
+        .btn-metlife-primary {
+            background-color: var(--metlife-blue);
+            border-color: var(--metlife-blue);
+            color: #ffffff;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-metlife-primary:hover {
+            background-color: var(--metlife-dark-blue);
+            border-color: var(--metlife-dark-blue);
+            color: #ffffff;
+        }
+
+        /* Botón secundario Verde MetLife */
+        .btn-metlife-green {
+            background-color: var(--metlife-green);
+            border-color: var(--metlife-green);
+            color: #022136;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-metlife-green:hover {
+            background-color: var(--metlife-green-hover);
+            border-color: var(--metlife-green-hover);
+            color: #002b49;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-11 col-lg-10">
+                
+                <div class="card metlife-card shadow-sm border-0 rounded-3 p-4 p-md-5 bg-white">
+                    <div class="text-center border-bottom pb-3 mb-4">
+                        <h2 class="fw-bold metlife-title mb-1">FORMULARIO</h2>
+                        <p class="text-dark mb-0">Completa los campos ordenadamente.</p>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="form-grid">
+                            {% for field in form %}
+                                <div class="field-box">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="error-rojo">
+                                            {% for error in field.errors %}
+                                                ⚠️ {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Botones corporativos lado a lado -->
+                        <div class="row g-3 mt-4 pt-4 border-top">
+                            <div class="col-sm-6">
+                                <button type="submit" class="btn btn-metlife-primary btn-lg w-100 fw-semibold shadow-sm">
+                                    📂 Guardar Registro
+                                </button>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="{% url 'descargar_excel' %}" class="btn btn-metlife-green btn-lg w-100 fw-semibold shadow-sm">
+                                    📥 Descargar Excel
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
